@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de gestão para assistência técnica: clientes, equipamentos, ordens de serviço, técnicos e pagamentos.">
+  <title>TechRepair | Gestão de assistência técnica</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="TechRepair, início"><span class="brand-mark">⚙</span>Tech<b>Repair</b></a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <nav class="main-nav" id="mainNav">
+      <a href="#inicio">Início</a><a href="#recursos">Recursos</a><a href="#gestao">Gestão</a><a href="#sobre">Sobre</a>
+    </nav>
+    <a class="btn btn-primary header-cta" href="#gestao">Abrir painel</a>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-text">
+        <h1>Cada aparelho na bancada, cada ordem no lugar.</h1>
+        <p>Cadastre clientes e equipamentos, abra ordens de serviço, acompanhe técnicos e registre pagamentos sem perder nenhum chamado.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#gestao">Abrir painel</a>
+          <a class="btn btn-ghost" href="#recursos">Ver recursos</a>
+        </div>
+      </div>
+      <aside class="ticket" aria-label="Resumo da oficina">
+        <div class="ticket-head"><span>Ordem de serviço</span><span id="ticketNo">Resumo</span></div>
+        <dl>
+          <div><dt>Clientes</dt><dd id="cntClientes">—</dd></div>
+          <div><dt>Ordens abertas</dt><dd id="cntOrdens">—</dd></div>
+          <div><dt>Em andamento</dt><dd id="cntAndamento">—</dd></div>
+        </dl>
+        <div class="ticket-foot">Atualizado direto da API</div>
+      </aside>
+    </section>
+
+    <section class="wrap" id="recursos">
+      <h2 class="section-title">Tudo o que a oficina precisa</h2>
+      <div class="feature-grid">
+        <article><span class="ico">☺</span><h3>Clientes</h3><p>Nome, e-mail e telefone de quem deixa o aparelho.</p></article>
+        <article><span class="ico">▣</span><h3>Equipamentos</h3><p>Cada aparelho pertence a um cliente.</p></article>
+        <article><span class="ico">✎</span><h3>Ordens de serviço</h3><p>Ligam equipamento e técnico e seguem um fluxo de status.</p></article>
+        <article><span class="ico">⚒</span><h3>Técnicos</h3><p>Quem atende e em quais especialidades.</p></article>
+        <article><span class="ico">$</span><h3>Pagamentos</h3><p>Nascem pendentes e só são confirmados com comprovante.</p></article>
+      </div>
+    </section>
+
+    <section class="panel-section" id="gestao">
+      <div class="wrap">
+        <h2 class="section-title">Painel de gestão</h2>
+        <p class="section-sub">Escolha uma área para consultar, cadastrar, editar ou excluir registros.</p>
+        <div class="layout">
+          <aside class="sidebar">
+            <div id="entityNav" class="entity-nav">
+              <button class="nav-item active" data-entity="clientes">1. Clientes</button>
+              <button class="nav-item" data-entity="equipamentos">2. Equipamentos</button>
+              <button class="nav-item" data-entity="tecnicos">3. Técnicos</button>
+              <button class="nav-item" data-entity="ordensservicos">4. Ordens de serviço</button>
+              <button class="nav-item" data-entity="pagamentos">5. Pagamentos</button>
+            </div>
+            <p class="flow">Siga a ordem do menu: cada etapa usa o que foi cadastrado na anterior.</p>
+          </aside>
+          <section class="workspace">
+            <div class="ws-top">
+              <div><h3 id="entityTitle">Clientes</h3><p id="entityDescription"></p></div>
+              <button class="btn btn-primary" id="addButton">+ Novo cadastro</button>
+            </div>
+            <div class="toolbar">
+              <input id="searchInput" type="search" placeholder="Buscar nesta lista..." aria-label="Buscar registros">
+              <button class="btn btn-ghost" id="refreshButton">Atualizar</button>
+            </div>
+            <div id="statusMessage" class="status-message" role="status" aria-live="polite"></div>
+            <div class="table-wrap"><table><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table></div>
+            <div class="table-footer" id="recordCount"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap about" id="sobre">
+      <h2 class="section-title">Sobre o projeto</h2>
+      <p>O TechRepair é um projeto acadêmico. Esta página conversa com uma API REST em Spring Boot, que grava os dados em um banco MySQL.</p>
+    </section>
+  </main>
+
+  <footer><span>TechRepair • Projeto acadêmico</span><a href="#inicio">Voltar ao topo</a></footer>
+
+  <dialog id="recordDialog" class="record-dialog">
+    <form id="recordForm">
+      <div class="dlg-head"><h3 id="dialogTitle">Novo cadastro</h3><button type="button" class="close" id="closeDialog" aria-label="Fechar">×</button></div>
+      <div id="formFields" class="form-fields"></div>
+      <p id="formError" class="form-error" role="alert"></p>
+      <div class="dlg-actions"><button type="button" class="btn btn-ghost" id="cancelButton">Cancelar</button><button type="submit" class="btn btn-primary">Salvar</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
